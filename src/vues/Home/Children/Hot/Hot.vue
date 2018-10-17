@@ -1,18 +1,17 @@
 <template>
   <div class="hot">
-      <div class="swiper-container">
+      <!--轮播图-->
+      <div class="swiper-container" v-if="homecasual.length > 0">
         <div class="swiper-wrapper">
-          <div class="swiper-slide"><img src="../../imgs/rowing/s1.png" alt="" width="100%"></div>
-          <div class="swiper-slide"><img src="../../imgs/rowing/s2.png" alt="" width="100%"></div>
-          <div class="swiper-slide"><img src="../../imgs/rowing/s3.png" alt="" width="100%"></div>
-          <div class="swiper-slide"><img src="../../imgs/rowing/s4.png" alt="" width="100%"></div>
-          <div class="swiper-slide"><img src="../../imgs/rowing/s5.png" alt="" width="100%"></div>
-          <div class="swiper-slide"><img src="../../imgs/rowing/s6.png" alt="" width="100%"></div>
-          <div class="swiper-slide"><img src="../../imgs/rowing/s7.png" alt="" width="100%"></div>
+          <div class="swiper-slide" v-for="(casual, index) in homecasual" :key="index">
+            <img :src="casual.imgurl" alt="" width="100%">
+          </div>
         </div>
         <div class="swiper-pagination"></div>
-      </div>
+      </div >
+      <!--导航-->
       <HotNav></HotNav>
+      <!--广告-->
       <div class="hot-ad">
         <img src="./../../imgs/hot_ad/home_ad.gif" width="100%" alt="">
       </div>
@@ -28,9 +27,18 @@
   import HotNav from './HotNav'
   import HotShopList from './HotShopList'
 
+  import {mapState} from 'vuex'
+
   export default {
     name: "Hot",
     mounted() {
+      //请求轮播图数据
+      this.$store.dispatch('reqHomeCasual');
+      //获取导航
+      this.$store.dispatch('reqHomeNav');
+      //获取导航
+      this.$store.dispatch('reqHomeShopList');
+
       //创建swiper实例
       new Swiper('.swiper-container', {
         autoplay: true,//可选选项，自动滑动
@@ -40,6 +48,26 @@
           el: '.swiper-pagination',
         },
       })
+    },
+    watch:{
+      homecasual(){
+        this.$nextTick(()=>{
+          //创建swiper实例
+          new Swiper('.swiper-container', {
+            autoplay: true,//可选选项，自动滑动
+            loop: true, // 循环模式选项
+            // 如果需要分页器
+            pagination: {
+              el: '.swiper-pagination',
+            },
+          })
+        })
+      }
+    },
+    computed: {
+      //获取轮播数据
+      ...mapState(['homecasual']),
+
     },
     components:{
       HotNav,HotShopList

@@ -1,58 +1,32 @@
 <template>
-    <div class="shot-container">
+    <div class="shot-container" v-if="homeshoplist.length > 0">
         <ul class="shop-list">
-            <li class="shop-list-item">
-              <img src="./../../imgs/shop_list/shop_item.png" width="100%" alt="">
-              <h4 class="list-item-title">【唐幂】整条刺绣民族风围巾女士秋冬季中年妈妈羊绒羊毛披肩保暖</h4>
+            <li class="shop-list-item" v-for="(shop, index) in homeshoplist" :key="index">
+              <img :src="shop.image_url" width="100%" alt="">
+              <h4 class="list-item-title">{{shop.goods_name}}</h4>
               <div class="list-item-bottom">
-                <span class="item-price">￥26.9</span>
-                <span class="item-count">已拼5009件</span>
+                <span class="item-price">￥{{shop.normal_price / 100}}</span>
+                <span class="item-count">{{shop.sales_tip}}</span>
                 <span class="item-user">
-                  <img src="./../../imgs/shop_list/user1.jpg" alt="">
-                  <img src="./../../imgs/shop_list/user2.jpg" alt="">
+                  <img :src="user.avatar"  v-for="(user , index1) in shop.bubble" :key="index1" alt="">
                 </span>
                 <span class="item-buy">
                   <button>去拼单 ></button>
                 </span>
               </div>
             </li>
-          <li class="shop-list-item">
-            <img src="./../../imgs/shop_list/shop_item.png" width="100%" alt="">
-            <h4 class="list-item-title">【唐幂】整条刺绣民族风围巾女士秋冬季中年妈妈羊绒羊毛披肩保暖</h4>
-            <div class="list-item-bottom">
-              <span class="item-price">￥26.9</span>
-              <span class="item-count">已拼5009件</span>
-              <span class="item-user">
-                  <img src="./../../imgs/shop_list/user1.jpg" alt="">
-                  <img src="./../../imgs/shop_list/user2.jpg" alt="">
-                </span>
-              <span class="item-buy">
-                  <button>去拼单</button>
-                </span>
-            </div>
-          </li>
-          <li class="shop-list-item">
-            <img src="./../../imgs/shop_list/shop_item.png" width="100%" alt="">
-            <h4 class="list-item-title">【唐幂】整条刺绣民族风围巾女士秋冬季中年妈妈羊绒羊毛披肩保暖</h4>
-            <div class="list-item-bottom">
-              <span class="item-price">￥26.9</span>
-              <span class="item-count">已拼5009件</span>
-              <span class="item-user">
-                  <img src="./../../imgs/shop_list/user1.jpg" alt="">
-                  <img src="./../../imgs/shop_list/user2.jpg" alt="">
-                </span>
-              <span class="item-buy">
-                  <button>去拼单</button>
-                </span>
-            </div>
-          </li>
         </ul>
     </div>
 </template>
 
 <script>
+    import {mapState} from 'vuex'
+
     export default {
-        name: "HotShopList"
+        name: "HotShopList",
+        computed:{
+          ...mapState(['homeshoplist'])
+        }
     }
 </script>
 
