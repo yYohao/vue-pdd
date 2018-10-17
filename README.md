@@ -1,6 +1,6 @@
 # vue_pdd
 
-> A Vue.js project
+> Vue + Vue-cli + Vue-router + Vuex + axios + stylus 实现pdd商城
 
 ## Build Setup
 
