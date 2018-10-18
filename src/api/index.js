@@ -13,3 +13,5 @@ export const getHomeNav = ()=> ajax(BASE_URL + '/api/homenav');
 export const getHomeShopList = ()=> ajax(BASE_URL + '/api/homeshoplist');
 //4请求推荐商品列表
 export const getRecShopList = ()=> ajax(BASE_URL + '/api/recommendshoplist');
+//5请求搜索商品列表
+export const getSearchGoods = ()=> ajax(BASE_URL + '/api/searchgoods');

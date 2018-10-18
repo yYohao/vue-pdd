@@ -2,14 +2,16 @@ import {
   getHomeCasual,
   getHomeNav,
   getHomeShopList,
-  getRecShopList
+  getRecShopList,
+  getSearchGoods
 } from '../api/index'
 
 import {
   HOME_CASUAL,
   HOME_NAV,
   HOME_SHOP_LIST,
-  REC_SHOP_LIST
+  REC_SHOP_LIST,
+  SEARCH_GOODS
 } from './mutation-type'
 
 export default {
@@ -32,5 +34,12 @@ export default {
   async reqRecShopList({commit}){
     const nav_result = await getRecShopList();
     commit(REC_SHOP_LIST, {recommendshoplist : nav_result.message.data})
+  },
+  //获取搜索商品列表
+  async reqSearchGoods({commit}, callback){
+    const nav_result = await getSearchGoods();
+    commit(SEARCH_GOODS, {searchgoods : nav_result.message.data})
+
+    callback && callback();
   },
 }

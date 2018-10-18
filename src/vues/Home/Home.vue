@@ -13,7 +13,6 @@
 
 <script>
 
-
     export default {
         name: "Home",
         data(){
