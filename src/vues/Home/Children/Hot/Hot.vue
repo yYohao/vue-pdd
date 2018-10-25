@@ -26,7 +26,6 @@
 
   import HotNav from './HotNav'
   import HotShopList from './HotShopList'
-
   import {mapState} from 'vuex'
 
   export default {

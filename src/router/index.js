@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Home from './../vues/Home/Home'
 import Recommend from './../vues/Recommend/Recommend'
 import Search from './../vues/Search/Search'
+import Login from './../vues/Login/Login'
 import Chat from './../vues/Chat/Chat'
 import Mine from './../vues/Mine/Mine'
 import Hot from '../vues/Home/Children/Hot/Hot'
@@ -26,7 +27,7 @@ export default new VueRouter({
       path: '/home',
       component: Home,
       children : [
-        {path: 'hot', component: Hot},
+        {path: 'hot', component: Hot,meta: {showBottomTabBar: true}},
         {path: 'box', component: Box},
         {path: 'dress', component: Dress},
         {path: 'ele', component: Ele},
@@ -36,23 +37,32 @@ export default new VueRouter({
         {path: 'man', component: Man},
         {path: 'shirt', component: Shirt},
         {path: '/home', redirect: '/home/hot'},
-      ]
+      ],
+
     },
     {
       path: '/recommend',
-      component: Recommend
+      component: Recommend,
+      meta: {showBottomTabBar: true}
     },
     {
       path: '/search',
-      component: Search
+      component: Search,
+      meta: {showBottomTabBar: true}
     },
     {
       path: '/chat',
-      component: Chat
+      component: Chat,
+      meta: {showBottomTabBar: true}
     },
     {
       path: '/mine',
-      component: Mine
+      component: Mine,
+      meta: {showBottomTabBar: true}
+    },
+    {
+      path: '/login',
+      component: Login
     },
     {
       path: '/',

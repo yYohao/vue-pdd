@@ -12,18 +12,73 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
-    import ShopList from './../../components/ShopList/ShopList'
+    import {mapState} from 'vuex';
+    import ShopList from './../../components/ShopList/ShopList';
+    import BScroll from 'better-scroll';
+    import { Indicator } from 'mint-ui';
     export default {
         name: "Recommend",
+        data(){
+          return{
+            page : 1,
+            count : 10
+          }
+        },
         mounted(){
-          this.$store.dispatch('reqRecShopList');
+          Indicator.open();
+          this.$store.dispatch('reqRecShopList', {page:this.page, count: this.count, callback: ()=>{
+            Indicator.close();
+          }});
         },
         computed:{
-          ...mapState(['recommendshoplist'])
+          ...mapState(['recommendshoplist']),
         },
         components: {
           ShopList
+        },
+        watch:{
+          recommendshoplist(){
+
+            this.$nextTick(()=>{
+              //让当前页码+1
+              this.page += 1;
+
+              this._initBScroll();
+            })
+          }
+        },
+        methods:{
+          _initBScroll(){
+            //初始化
+            this.listScroll = new BScroll('.recommend-container',{
+              scrollY: true,
+              probeType: 3
+            });
+
+            //监听列表滚动
+            this.listScroll.on('touchEnd', (pos)=>{
+              //监听下拉
+              // console.log(pos.y);
+              // console.log(this.listScroll.maxScrollY);
+              if (pos.y >= 50){
+                console.log("下拉");
+              }
+              //监听上啦
+              if (this.listScroll.maxScrollY > pos.y + 30){
+                Indicator.open();
+                this.$store.dispatch('reqRecShopList', {page:this.page, count: this.count, callback: ()=>{
+                  Indicator.close();
+                }});
+              }
+            })
+
+            //列表滚动结束
+            this.listScroll.on('scrollEnd', (pos)=>{
+              this.listScroll.refresh();
+            })
+          },
+
+
         }
     }
 </script>
@@ -33,51 +88,11 @@
     background #f5f5f5
     width 100%
     height 100%
+    overflow hidden
     .recommend
       display flex
       flex-direction row
       flex-wrap wrap
       background-color #f5f5f5
-      margin-bottom 50px
-
-      /*.recommend-item:nth-child(2n-1)*/
-        /*margin-right 1%*/
-      /*.recommend-item*/
-        /*width 49.5%*/
-        /*background #fff*/
-        /*padding-bottom 15px*/
-        /*margin-bottom 15px*/
-        /*img*/
-          /*width 100%*/
-        /*.item-title*/
-          /*font-weight lighter*/
-          /*line-height 20px*/
-          /*font-size 13px*/
-          /*overflow hidden*/
-          /*height 20px*/
-          /*margin 5px 0*/
-          /*padding 0 5px*/
-        /*.item-bottom*/
-          /*display flex*/
-          /*flex-direction row*/
-          /*align-items center*/
-          /*padding 0 6px*/
-          /*.item-price*/
-            /*flex 2*/
-            /*color red*/
-            /*font-weight bolder*/
-            /*font-size 12px*/
-          /*.item-count*/
-            /*flex 4*/
-            /*font-size 10px*/
-            /*color #666*/
-          /*button*/
-            /*border 1px solid orangered*/
-            /*flex 2*/
-            /*height 22px*/
-            /*width 80%*/
-            /*background-color: transparent*/
-            /*color red*/
-            /*font-size 10px*/
-            /*border-radius 5px*/
+      padding-bottom 50px
 </style>

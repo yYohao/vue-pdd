@@ -18,7 +18,7 @@ export default {
   //获取首页轮播图
   async reqHomeCasual({commit}){
     const result = await getHomeCasual();
-    commit(HOME_CASUAL, {homecasual : result.message.data})
+    commit(HOME_CASUAL, {homecasual : result.message})
   },
   //获取首页导航
   async reqHomeNav({commit}){
@@ -31,9 +31,10 @@ export default {
     commit(HOME_SHOP_LIST, {homeshoplist : nav_result.message.goods_list})
   },
   //获取推荐商品列表
-  async reqRecShopList({commit}){
-    const nav_result = await getRecShopList();
-    commit(REC_SHOP_LIST, {recommendshoplist : nav_result.message.data})
+  async reqRecShopList({commit}, params){
+    console.log(params);
+    const nav_result = await getRecShopList(params);
+    commit(REC_SHOP_LIST, {recommendshoplist : nav_result.message})
   },
   //获取搜索商品列表
   async reqSearchGoods({commit}, callback){
