@@ -64,7 +64,7 @@
                 <img 
                   ref="captcha"
                   class="get-verification" 
-                  src="http://127.0.0.1:3000/api/captcha" 
+                  src="http://localhost:3000/api/captcha"
                   alt="captcha"
                   @click.prevent="getCaptcha()"
                   >
@@ -80,8 +80,9 @@
 </template>
 
 <script>
-    import { getPhoneCode } from './../../api/index.js'
+    import { getPhoneCode, phoneCodeLogin, pwdLogin } from './../../api/index.js'
     import { Toast } from 'mint-ui';
+    import {mapActions} from 'vuex'
     export default {
         name: "Login",
         data(){
@@ -93,7 +94,8 @@
             user_name: "",
             pwd: "", //密码
             captcha : "",
-            code: "" //手机验证码
+            code: "", //手机验证码
+            userInfo: {}
           }
         },
         computed:{
@@ -103,11 +105,12 @@
           }
         },
         methods:{
-          //登录模式
+          ...mapActions(['syncUserInfo']),
+          //1.登录模式
           dealLoginMode(flag){
             this.loginMode = flag;
           },
-          //获取验证码
+          //2.获取验证码
           async getVerifyCode(){
             //1.开启倒计时
             if(this.phoneRight){
@@ -136,16 +139,79 @@
             }
             
           },
-          //密码显示方式
+          //3.密码显示方式
           dealPwdMode(flag){
             this.pwdMode = flag;
           },
-          //获取图形验证码
+          //4.获取图形验证码
           getCaptcha(){
-            this.$refs.captcha.src='http://127.0.0.1:3000/api/captcha?time' + new Date(); 
+            this.$refs.captcha.src='http://localhost:3000/api/captcha?time' + new Date();
           },
-          login(){
+          //5.登录
+          async login(){
+            let result;
+            //5.1 登录模式
+            if(this.loginMode){ //验证码登录
+              //5.2 前台校验
+              if(!this.phone){
+                Toast("请输入手机号码");
+                return;
+              }else if(!this.phoneRight){
+                Toast("请输入正确的手机号码");
+                return;
+              }
 
+              if(!this.code){
+                Toast("请输入验证码");
+                return;
+              }else if(!(/^\d{6}$/gi.test(this.code))){
+                Toast("请输入正确的验证码");
+                return;
+              }
+              //5.3 手机验证码登录
+              result = await phoneCodeLogin(this.phone, this.code);
+              // console.log(result);
+              
+
+            }else{ //帐号密码登录
+              //5.4 前台校验
+              console.log(111);
+              if(!this.user_name){
+                Toast("请输入用户名/手机/邮箱");
+                return;
+              }else if(!this.pwd){
+                Toast("请输入密码");
+                return;
+              }else if(!this.captcha){
+                Toast("请输入验证码");
+                return;
+              }
+              console.log(222);
+              //用户名密码登录
+              result = await pwdLogin(this.user_name, this.pwd, this.captcha);
+              console.log(333);
+              
+            }
+
+            //6 后续处理
+
+            if(result.success_code === 200){
+              this.userInfo = result.message;
+            }else{
+              this.userInfo = {
+                message: "登录失败, 手机号或验证码不正确",
+              }
+            }
+
+            if(!this.userInfo.id){ //失败
+              Toast(this.userInfo.message);
+              
+            }else{ //成功
+              //6.1 同步用户数据
+              this.syncUserInfo(this.userInfo);
+              //6.2 回到主界面
+              this.$router.back();
+            }
           }
         }
     }

@@ -9,4 +9,6 @@ export default {
   recommendshoplist : [],
   //推荐商品列表
   searchgoods : [],
+  //用户数据
+  userInfo: {}
 }

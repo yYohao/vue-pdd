@@ -17,10 +17,13 @@ export default function ajax(url = '' , params = {}, type = 'GET') {
       }
       //完整路径
       url += '?' + paramsStr;
+      console.log(url);
       //发送get请求
       promise = axios.get(url)
     } else if ('POST' === type) {
+      console.log(url);
       promise = axios.post(url, params)
+
     }
     //返回请求结果
     promise.then((response) => {

@@ -11,7 +11,8 @@ import {
   HOME_NAV,
   HOME_SHOP_LIST,
   REC_SHOP_LIST,
-  SEARCH_GOODS
+  SEARCH_GOODS,
+  USER_INFO
 } from './mutation-type'
 
 export default {
@@ -43,4 +44,8 @@ export default {
 
     callback && callback();
   },
+  //同步用户信息
+  syncUserInfo({commit}, userInfo){
+    commit(USER_INFO, {userInfo})
+  }
 }
